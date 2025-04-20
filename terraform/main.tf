@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "terraform-leo"
+    bucket         = "terraform-dhruv"
     key            = "terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
@@ -49,7 +49,7 @@ resource "aws_iam_policy_attachment" "amplify_full_access" {
 # Amplify App
 resource "aws_amplify_app" "plaid_app" {
   name         = "FiscAI"
-  repository   = "https://github.com/leo111223/fisco.git"
+  repository   = "https://github.com/dhruvvaidh/FiscAI"
   oauth_token  = var.github_token
   platform     = "WEB"
   iam_service_role_arn = aws_iam_role.amplify_role.arn
