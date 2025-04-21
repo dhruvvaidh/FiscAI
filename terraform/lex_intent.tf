@@ -548,23 +548,28 @@ resource "null_resource" "update_transaction_search_slot_priority" {
     command = <<EOT
       set -xe
 
+      # Get raw intent config
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} | \
+        --intent-id ${self.triggers.intent_id} > raw_intent.json
+
+      # Process JSON to maintain valid structure
       jq --arg m "${self.triggers.merchant_slot_id}" \
          --arg n "${self.triggers.min_amount_slot_id}" \
          'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $n}
-            ]' > updated_intent.json
+            ]
+          | .sampleUtterances = (.sampleUtterances // [])' \
+          raw_intent.json > updated_intent.json
 
-      # Validate JSON syntax
+      # Validate JSON
       jq empty updated_intent.json
 
-      # Push it back
+      # Update intent
       aws lexv2-models update-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
@@ -600,23 +605,28 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
     command = <<EOT
       set -xe
 
+      # Get raw intent config
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} | \
+        --intent-id ${self.triggers.intent_id} > raw_intent.json
+
+      # Process JSON to maintain valid structure
       jq --arg m "${self.triggers.month_slot_id}" \
          --arg y "${self.triggers.year_slot_id}" \
          'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $y}
-            ]' > updated_intent.json
+            ]
+          | .sampleUtterances = (.sampleUtterances // [])' \
+          raw_intent.json > updated_intent.json
 
-      # Validate JSON syntax
+      # Validate JSON
       jq empty updated_intent.json
 
-      # Push it back
+      # Update intent
       aws lexv2-models update-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
