@@ -546,7 +546,7 @@ resource "null_resource" "create_lex_alias" {
     aws_lexv2models_slot.category_slot,
     aws_lexv2models_slot.time_period_slot,
     aws_lexv2models_intent.get_spending_by_category,
-    null_resource.update_query_spending_by_category_slot_priorities,
+    null_resource.update_get_spending_by_category_slot_priorities,
  
     # TransactionSearch intent and slots
     aws_lexv2models_slot.merchant_slot,
