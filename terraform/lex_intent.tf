@@ -106,12 +106,6 @@ resource "aws_lexv2models_intent" "transaction_search" {
     enabled = true
   }
 
-  lifecycle {
-    ignore_changes = [
-      "value_elicitation_setting"
-    ]
-  }
-
   closing_setting {
     active = true
     closing_response {
