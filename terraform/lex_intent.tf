@@ -149,10 +149,23 @@ resource "aws_lexv2models_slot" "merchant_slot" {
       }
       max_retries     = 2
       allow_interrupt = true
-    }
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Initial"
 
-    prompt_selection_setting {
-      prompt_selection_strategy = "Random"
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
+
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Retry1"
+
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
     }
   }
 
@@ -185,10 +198,23 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
       }
       max_retries     = 2
       allow_interrupt = true
-    }
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Initial"
 
-    prompt_selection_setting {
-      prompt_selection_strategy = "Random"
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
+
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Retry1"
+
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
     }
   }
 
@@ -251,6 +277,7 @@ resource "aws_lexv2models_slot" "month_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
+      message_selection_strategy = "Random"
       message_group {
         message {
           plain_text_message {
@@ -260,12 +287,26 @@ resource "aws_lexv2models_slot" "month_slot" {
       }
       max_retries     = 2
       allow_interrupt = true
-    }
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Initial"
 
-    prompt_selection_setting {
-      prompt_selection_strategy = "Random"
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
+
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Retry1"
+
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
+      }
+
     }
-  }
+    }
 
   depends_on = [
     aws_lexv2models_intent.monthly_summary
@@ -297,9 +338,22 @@ resource "aws_lexv2models_slot" "year_slot" {
       max_retries     = 2
       allow_interrupt = true
     }
+    prompt_attempts_specification {
+      allow_interrupt = true
+      map_block_key   = "Initial"
 
-        prompt_selection_setting {
-      prompt_selection_strategy = "Random"
+      text_input_specification {
+        start_timeout_ms = 30000
+      }
+    }
+
+    prompt_attempts_specification {
+      allow_interrupt = true
+      map_block_key   = "Retry1"
+
+      text_input_specification {
+        start_timeout_ms = 30000
+      }
     }
   }
 
