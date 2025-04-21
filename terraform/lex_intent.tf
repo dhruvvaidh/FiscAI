@@ -548,24 +548,18 @@ resource "null_resource" "update_transaction_search_slot_priority" {
     command = <<EOT
       set -xe
 
-      # Pull existing intent, strip metadata
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} \
-        --output json > intent_config.json
-      jq 'del(.creationDateTime, .lastUpdatedDateTime, .version, .name)' \
-      intent_config.json > tmp_intent_config.json && mv tmp_intent_config.json intent_config.json
-
-      # Inject our two slot priorities
+        --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.merchant_slot_id}" \
          --arg n "${self.triggers.min_amount_slot_id}" \
-         '.slotPriorities = [
-             {"priority":1,"slotId": $m},
-             {"priority":2,"slotId": $n}
-           ]' \
-      intent_config.json > updated_intent.json
+         'del(.creationDateTime, .lastUpdatedDateTime, .version, .intentName)
+          | .slotPriorities = [
+              {"priority":1,"slotId": $m},
+              {"priority":2,"slotId": $n}
+            ]' > updated_intent.json
 
       # Push it back
       aws lexv2-models update-intent \
@@ -603,24 +597,18 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
     command = <<EOT
       set -xe
 
-      # Pull existing intent, strip metadata
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} \
-        --output json > intent_config.json
-      jq 'del(.creationDateTime, .lastUpdatedDateTime, .version, .name)' \
-        intent_config.json > tmp_intent_config.json && mv tmp_intent_config.json intent_config.json
-
-      # Inject our two slot priorities
+        --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.month_slot_id}" \
          --arg y "${self.triggers.year_slot_id}" \
-         '.slotPriorities = [
-             {"priority":1,"slotId": $m},
-             {"priority":2,"slotId": $y}
-           ]' \
-        intent_config.json > updated_intent.json
+         'del(.creationDateTime, .lastUpdatedDateTime, .version, .intentName)
+          | .slotPriorities = [
+              {"priority":1,"slotId": $m},
+              {"priority":2,"slotId": $y}
+            ]' > updated_intent.json
 
       # Push it back
       aws lexv2-models update-intent \
