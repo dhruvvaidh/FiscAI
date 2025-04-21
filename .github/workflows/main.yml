@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
           TF_VAR_github_token: ${{ secrets.PAT }}
+          TF_VAR_openai_api_key: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
