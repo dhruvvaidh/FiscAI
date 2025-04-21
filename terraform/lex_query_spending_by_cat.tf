@@ -91,8 +91,8 @@ resource "aws_lexv2models_slot" "category_slot" {
   bot_id       = aws_lexv2models_bot.finance_assistant.id
   bot_version  = "DRAFT"
   locale_id    = "en_US"
-  intent_id    = aws_lexv2models_intent.query_spending_by_category.intent_id
-  slot_type_id = aws_lexv2models_slot_type.spending_category_type.slot_type_id
+  intent_id    = aws_lexv2models_intent.get_spending_by_category.intent_id
+  slot_type_id = aws_lexv2models_slot_type.category.slot_type_id
   value_elicitation_setting {
     slot_constraint = "Required"
     
@@ -206,7 +206,7 @@ resource "aws_lexv2models_slot" "time_period_slot" {
   bot_id       = aws_lexv2models_bot.finance_assistant.id
   bot_version  = "DRAFT"
   locale_id    = "en_US"
-  intent_id    = aws_lexv2models_intent.query_spending_by_category.intent_id
+  intent_id    = aws_lexv2models_intent.get_spending_by_category.intent_id
   slot_type_id = "AMAZON.Date"
 
   value_elicitation_setting {
@@ -337,7 +337,12 @@ resource "aws_lexv2models_slot_type" "category" {
     for_each = local.transaction_categories
     content {
       sample_value { value = slot_type_values.value.sampleValue.value }
-      synonyms       = slot_type_values.value.synonyms
+      dynamic "synonyms" {
+        for_each = slot_type_values.value.synonyms
+        content {
+          value = synonyms.value
+        }
+      }
     }
   }
 

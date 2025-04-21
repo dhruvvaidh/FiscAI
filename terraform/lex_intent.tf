@@ -140,7 +140,7 @@ resource "aws_lexv2models_slot" "merchant_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
-      message_groups {
+      message_group {
         message {
           plain_text_message {
             value = "Which merchant would you like to search for?"
@@ -151,7 +151,7 @@ resource "aws_lexv2models_slot" "merchant_slot" {
       allow_interrupt = true
     }
 
-    prompt_selection_strategy = "Random"
+    #prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -174,7 +174,7 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
-      message_groups {
+      message_group {
         message {
           plain_text_message {
             value = "What minimum amount should I use?"
@@ -185,7 +185,7 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
       allow_interrupt = true
     }
 
-    prompt_selection_strategy = "Random"
+    #prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -247,7 +247,7 @@ resource "aws_lexv2models_slot" "month_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
-      message_groups {
+      message_group {
         message {
           plain_text_message {
             value = "Which month?"
@@ -258,7 +258,7 @@ resource "aws_lexv2models_slot" "month_slot" {
       allow_interrupt = true
     }
 
-    prompt_selection_strategy = "Random"
+    #prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -281,7 +281,7 @@ resource "aws_lexv2models_slot" "year_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
-      message_groups {
+      message_group {
         message {
           plain_text_message {
             value = "Which year?"
@@ -292,7 +292,7 @@ resource "aws_lexv2models_slot" "year_slot" {
       allow_interrupt = true
     }
 
-    prompt_selection_strategy = "Random"
+    #prompt_selection_strategy = "Random"
   }
 
   depends_on = [
