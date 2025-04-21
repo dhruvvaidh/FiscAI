@@ -553,9 +553,10 @@ resource "null_resource" "update_transaction_search_slot_priority" {
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} | \
+        --intent-id ${self.triggers.intent_id} \
+        --output json > intent_config.json
       jq 'del(.creationDateTime, .lastUpdatedDateTime, .version, .name)' \
-      > intent_config.json
+      intent_config.json > tmp_intent_config.json && mv tmp_intent_config.json intent_config.json
 
       # Inject our two slot priorities
       jq --arg m "${self.triggers.merchant_slot_id}" \
@@ -607,9 +608,10 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} | \
+        --intent-id ${self.triggers.intent_id} \
+        --output json > intent_config.json
       jq 'del(.creationDateTime, .lastUpdatedDateTime, .version, .name)' \
-      > intent_config.json
+        intent_config.json > tmp_intent_config.json && mv tmp_intent_config.json intent_config.json
 
       # Inject our two slot priorities
       jq --arg m "${self.triggers.month_slot_id}" \
@@ -618,7 +620,7 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
              {"priority":1,"slotId": $m},
              {"priority":2,"slotId": $y}
            ]' \
-      intent_config.json > updated_intent.json
+        intent_config.json > updated_intent.json
 
       # Push it back
       aws lexv2-models update-intent \
