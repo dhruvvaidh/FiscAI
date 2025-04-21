@@ -106,6 +106,12 @@ resource "aws_lexv2models_intent" "transaction_search" {
     enabled = true
   }
 
+  lifecycle {
+    ignore_changes = [
+      "value_elicitation_setting"
+    ]
+  }
+
   closing_setting {
     active = true
     closing_response {
@@ -211,6 +217,12 @@ resource "aws_lexv2models_intent" "monthly_summary" {
 
   fulfillment_code_hook {
     enabled = true
+  }
+
+  lifecycle {
+    ignore_changes = [
+      "value_elicitation_setting"
+    ]
   }
 
   closing_setting {

@@ -23,7 +23,13 @@ resource "aws_lexv2models_intent" "get_spending_by_category" {
   fulfillment_code_hook {
     enabled = true
   }
-  
+
+  lifecycle {
+    ignore_changes = [
+      "value_elicitation_setting"
+    ]
+  }
+
   closing_setting {
     active = true
     closing_response {
