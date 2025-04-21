@@ -555,11 +555,14 @@ resource "null_resource" "update_transaction_search_slot_priority" {
         --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.merchant_slot_id}" \
          --arg n "${self.triggers.min_amount_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version)
+         'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $n}
             ]' > updated_intent.json
+
+      # Validate JSON syntax
+      jq empty updated_intent.json
 
       # Push it back
       aws lexv2-models update-intent \
@@ -604,11 +607,14 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
         --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.month_slot_id}" \
          --arg y "${self.triggers.year_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version)
+         'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $y}
             ]' > updated_intent.json
+
+      # Validate JSON syntax
+      jq empty updated_intent.json
 
       # Push it back
       aws lexv2-models update-intent \
