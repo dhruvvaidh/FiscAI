@@ -114,7 +114,7 @@ resource "aws_lexv2models_intent" "transaction_search" {
           plain_text_message {
             value = "Is there anything else you’d like to know?"
           }
-        }
+        } 
       }
       allow_interrupt = true
     }
@@ -151,7 +151,7 @@ resource "aws_lexv2models_slot" "merchant_slot" {
       allow_interrupt = true
     }
 
-    #prompt_selection_strategy = "Random"
+    prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -185,7 +185,7 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
       allow_interrupt = true
     }
 
-    #prompt_selection_strategy = "Random"
+    prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -258,7 +258,7 @@ resource "aws_lexv2models_slot" "month_slot" {
       allow_interrupt = true
     }
 
-    #prompt_selection_strategy = "Random"
+    prompt_selection_strategy = "Random"
   }
 
   depends_on = [
@@ -292,7 +292,7 @@ resource "aws_lexv2models_slot" "year_slot" {
       allow_interrupt = true
     }
 
-    #prompt_selection_strategy = "Random"
+    prompt_selection_strategy = "Random"
   }
 
   depends_on = [
