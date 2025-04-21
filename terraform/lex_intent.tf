@@ -140,6 +140,9 @@ resource "aws_lexv2models_slot" "merchant_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
+      allow_interrupt            = true
+      max_retries                = 1
+      message_selection_strategy = "Random"
       message_group {
         message {
           plain_text_message {
@@ -147,8 +150,6 @@ resource "aws_lexv2models_slot" "merchant_slot" {
           }
         }
       }
-      max_retries     = 2
-      allow_interrupt = true
       prompt_attempts_specification {
         allow_interrupt = true
         map_block_key   = "Initial"
@@ -231,6 +232,9 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
+      allow_interrupt            = true
+      max_retries                = 1
+      message_selection_strategy = "Random"
       message_group {
         message {
           plain_text_message {
@@ -238,8 +242,6 @@ resource "aws_lexv2models_slot" "min_amount_slot" {
           }
         }
       }
-      max_retries     = 2
-      allow_interrupt = true
       prompt_attempts_specification {
         allow_interrupt = true
         map_block_key   = "Initial"
@@ -361,6 +363,8 @@ resource "aws_lexv2models_slot" "month_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
+      allow_interrupt            = true
+      max_retries                = 1
       message_selection_strategy = "Random"
       message_group {
         message {
@@ -369,8 +373,6 @@ resource "aws_lexv2models_slot" "month_slot" {
           }
         }
       }
-      max_retries     = 2
-      allow_interrupt = true
       prompt_attempts_specification {
         allow_interrupt = true
         map_block_key   = "Initial"
@@ -454,6 +456,9 @@ resource "aws_lexv2models_slot" "year_slot" {
     slot_constraint = "Required"
 
     prompt_specification {
+      allow_interrupt            = true
+      max_retries                = 1
+      message_selection_strategy = "Random"
       message_group {
         message {
           plain_text_message {
@@ -461,8 +466,6 @@ resource "aws_lexv2models_slot" "year_slot" {
           }
         }
       }
-      max_retries     = 2
-      allow_interrupt = true
       prompt_attempts_specification {
         allow_interrupt = true
         map_block_key   = "Initial"
