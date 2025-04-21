@@ -548,29 +548,27 @@ resource "null_resource" "update_transaction_search_slot_priority" {
     command = <<EOT
       set -xe
 
-      # Get raw intent config
+      # Fetch and transform intent in one step
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} > raw_intent.json
+        --intent-id ${self.triggers.intent_id} \
+        --output json \
+      | jq --arg m "${self.triggers.merchant_slot_id}" --arg n "${self.triggers.min_amount_slot_id}" '
+          del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
+        | .slotPriorities = [
+            { "priority": 1, "slotId": $m },
+            { "priority": 2, "slotId": $n }
+          ]
+        | .intentName = "TransactionSearch"
+        | .sampleUtterances = (.sampleUtterances // [])
+      ' > updated_intent.json
 
-      # Process JSON to retain intentName and fix structure
-      jq --arg m "${self.triggers.merchant_slot_id}" \
-         --arg n "${self.triggers.min_amount_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
-          | .slotPriorities = [
-              {"priority":1,"slotId": $m},
-              {"priority":2,"slotId": $n}
-            ]
-          | .intentName = "TransactionSearch"
-          | .sampleUtterances = (.sampleUtterances // [])' \
-          raw_intent.json > updated_intent.json
-
-      # Validate JSON
+      # Validate the transformed JSON
       jq empty updated_intent.json
 
-      # Update intent
+      # Push the updated intent back to Lex
       aws lexv2-models update-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
@@ -604,29 +602,27 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
     command = <<EOT
       set -xe
 
-      # Get raw intent config
+      # Fetch and transform MonthlySummary intent in one step
       aws lexv2-models describe-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
         --locale-id en_US \
-        --intent-id ${self.triggers.intent_id} > raw_intent.json
+        --intent-id ${self.triggers.intent_id} \
+        --output json \
+      | jq --arg m "${self.triggers.month_slot_id}" --arg y "${self.triggers.year_slot_id}" '
+          del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
+        | .slotPriorities = [
+            { "priority": 1, "slotId": $m },
+            { "priority": 2, "slotId": $y }
+          ]
+        | .intentName = "MonthlySummary"
+        | .sampleUtterances = (.sampleUtterances // [])
+      ' > updated_intent.json
 
-      # Process JSON to retain intentName and fix structure
-      jq --arg m "${self.triggers.month_slot_id}" \
-         --arg y "${self.triggers.year_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
-          | .slotPriorities = [
-              {"priority":1,"slotId": $m},
-              {"priority":2,"slotId": $y}
-            ]
-          | .intentName = "MonthlySummary"
-          | .sampleUtterances = (.sampleUtterances // [])' \
-          raw_intent.json > updated_intent.json
-
-      # Validate JSON
+      # Validate the transformed JSON
       jq empty updated_intent.json
 
-      # Update intent
+      # Push the updated intent back to Lex
       aws lexv2-models update-intent \
         --bot-id ${self.triggers.bot_id} \
         --bot-version DRAFT \
