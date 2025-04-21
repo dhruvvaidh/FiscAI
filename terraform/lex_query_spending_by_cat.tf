@@ -1,8 +1,8 @@
-locals {
-  transaction_categories = jsondecode(
-    file("${path.module}/transaction_categories.json")
-  )
-}
+#locals {
+#  transaction_categories = jsondecode(
+#    file("${path.module}/transaction_categories.json")
+#  )
+#}
 
 # Intent definition for querying spending by category
 resource "aws_lexv2models_intent" "get_spending_by_category" {
@@ -23,49 +23,7 @@ resource "aws_lexv2models_intent" "get_spending_by_category" {
   fulfillment_code_hook {
     enabled = true
   }
-
-  slot {
-    name            = "Category"
-    slot_type_id    = aws_lexv2models_slot_type.category.slot_type_id
-    slot_constraint = "Required"
-
-    value_elicitation_setting {
-      prompt_specification {
-        message_groups {
-          message {
-            plain_text_message {
-              value = "Which category?"
-            }
-          }
-        }
-        max_retries     = 2
-        allow_interrupt = true
-      }
-      prompt_selection_strategy = "Random"
-    }
-  }
-
-  slot {
-    name            = "TimePeriod"
-    slot_type_id    = "AMAZON.Date"
-    slot_constraint = "Required"
-
-    value_elicitation_setting {
-      prompt_specification {
-        message_groups {
-          message {
-            plain_text_message {
-              value = "For which period?"
-            }
-          }
-        }
-        max_retries     = 2
-        allow_interrupt = true
-      }
-      prompt_selection_strategy = "Random"
-    }
-  }
-
+  
   closing_setting {
     active = true
     closing_response {
