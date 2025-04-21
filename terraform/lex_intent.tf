@@ -337,22 +337,22 @@ resource "aws_lexv2models_slot" "year_slot" {
       }
       max_retries     = 2
       allow_interrupt = true
-    }
-    prompt_attempts_specification {
-      allow_interrupt = true
-      map_block_key   = "Initial"
-
-      text_input_specification {
-        start_timeout_ms = 30000
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Initial"
+  
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
       }
-    }
-
-    prompt_attempts_specification {
-      allow_interrupt = true
-      map_block_key   = "Retry1"
-
-      text_input_specification {
-        start_timeout_ms = 30000
+  
+      prompt_attempts_specification {
+        allow_interrupt = true
+        map_block_key   = "Retry1"
+  
+        text_input_specification {
+          start_timeout_ms = 30000
+        }
       }
     }
   }
