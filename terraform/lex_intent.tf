@@ -555,7 +555,7 @@ resource "null_resource" "update_transaction_search_slot_priority" {
         --locale-id en_US \
         --intent-id ${self.triggers.intent_id} > raw_intent.json
 
-      # Process JSON to maintain valid structure
+      # Process JSON to retain intentName and fix structure
       jq --arg m "${self.triggers.merchant_slot_id}" \
          --arg n "${self.triggers.min_amount_slot_id}" \
          'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
@@ -563,6 +563,7 @@ resource "null_resource" "update_transaction_search_slot_priority" {
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $n}
             ]
+          | .intentName = "TransactionSearch"  # Explicitly set the name
           | .sampleUtterances = (.sampleUtterances // [])' \
           raw_intent.json > updated_intent.json
 
@@ -588,8 +589,6 @@ resource "null_resource" "update_transaction_search_slot_priority" {
     aws_lexv2models_slot.min_amount_slot,
   ]
 }
-
-
 # -------------------------------------------------------------------
 # Update slot priorities for MonthlySummary
 # -------------------------------------------------------------------
@@ -612,7 +611,7 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
         --locale-id en_US \
         --intent-id ${self.triggers.intent_id} > raw_intent.json
 
-      # Process JSON to maintain valid structure
+      # Process JSON to retain intentName and fix structure
       jq --arg m "${self.triggers.month_slot_id}" \
          --arg y "${self.triggers.year_slot_id}" \
          'del(.creationDateTime, .lastUpdatedDateTime, .version, .responseCard)
@@ -620,6 +619,7 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $y}
             ]
+          | .intentName = "MonthlySummary"  # Explicitly set the name
           | .sampleUtterances = (.sampleUtterances // [])' \
           raw_intent.json > updated_intent.json
 
