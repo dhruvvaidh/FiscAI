@@ -563,7 +563,7 @@ resource "null_resource" "update_transaction_search_slot_priority" {
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $n}
             ]
-          | .intentName = "TransactionSearch"  # Explicitly set the name
+          | .intentName = "TransactionSearch"
           | .sampleUtterances = (.sampleUtterances // [])' \
           raw_intent.json > updated_intent.json
 
@@ -619,7 +619,7 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $y}
             ]
-          | .intentName = "MonthlySummary"  # Explicitly set the name
+          | .intentName = "MonthlySummary"
           | .sampleUtterances = (.sampleUtterances // [])' \
           raw_intent.json > updated_intent.json
 
