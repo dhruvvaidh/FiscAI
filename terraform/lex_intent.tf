@@ -555,7 +555,7 @@ resource "null_resource" "update_transaction_search_slot_priority" {
         --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.merchant_slot_id}" \
          --arg n "${self.triggers.min_amount_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version, .intentName)
+         'del(.creationDateTime, .lastUpdatedDateTime, .version)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $n}
@@ -604,7 +604,7 @@ resource "null_resource" "update_monthly_summary_slot_priority" {
         --intent-id ${self.triggers.intent_id} | \
       jq --arg m "${self.triggers.month_slot_id}" \
          --arg y "${self.triggers.year_slot_id}" \
-         'del(.creationDateTime, .lastUpdatedDateTime, .version, .intentName)
+         'del(.creationDateTime, .lastUpdatedDateTime, .version)
           | .slotPriorities = [
               {"priority":1,"slotId": $m},
               {"priority":2,"slotId": $y}
