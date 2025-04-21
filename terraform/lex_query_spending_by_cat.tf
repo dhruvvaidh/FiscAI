@@ -23,14 +23,7 @@ resource "aws_lexv2models_intent" "get_spending_by_category" {
   fulfillment_code_hook {
     enabled = true
   }
-  slot_priority {
-    priority = 1
-    slot_id  = aws_lexv2models_slot.category_slot.slot_id
-  }
-  slot_priority {
-    priority = 2
-    slot_id  = aws_lexv2models_slot.time_period_slot.slot_id
-  }
+
   slot {
     name            = "Category"
     slot_type_id    = aws_lexv2models_slot_type.category.slot_type_id
@@ -343,10 +336,8 @@ resource "aws_lexv2models_slot_type" "category" {
   dynamic "slot_type_values" {
     for_each = local.transaction_categories
     content {
-      sample_value {
-        value = each.value.sampleValue.value
-      }
-      synonyms = each.value.synonyms
+      sample_value { value = slot_type_values.value.sampleValue.value }
+      synonyms       = slot_type_values.value.synonyms
     }
   }
 
